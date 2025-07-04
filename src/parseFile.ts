@@ -4,6 +4,7 @@ import { ParseOptions, Seq } from ".";
 import parseBenchling from "./parsers/benchling";
 import parseBioBrick from "./parsers/biobrick";
 import parseFasta from "./parsers/fasta";
+import parseFastq from "./parsers/fastq";
 import parseGenbank from "./parsers/genbank";
 import parseJbei from "./parsers/jbei";
 import parseSbol from "./parsers/sbol";
@@ -49,6 +50,13 @@ export default (file: string, opts?: ParseOptions): Seq[] => {
     case prefix.includes(':seq="http://jbei.org/sequence"'):
     case file.startsWith("<seq:seq"):
       seqs = parseJbei(file);
+      break;
+
+    // FASTQ
+    case file.startsWith("@"):
+    case fileName.endsWith(".fastq"):
+    case fileName.endsWith(".fq"):
+      seqs = parseFastq(file, fileName);
       break;
 
     // FASTA
